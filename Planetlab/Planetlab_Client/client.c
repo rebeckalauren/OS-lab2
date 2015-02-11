@@ -20,7 +20,6 @@
 
 void main(void) 
 {
-
 	HANDLE mailSlot;
 	DWORD bytesWritten;
 	int loops = 2000;
