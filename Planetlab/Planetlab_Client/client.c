@@ -34,6 +34,7 @@ void main(void)
 	}
 
 	/* NOTE: replace code below for sending planet data to the server. */
+	
 	while(loops-- > 0) 
 	{
 		/* send a friendly greeting to the server */

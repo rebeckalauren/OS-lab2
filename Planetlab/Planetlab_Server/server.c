@@ -174,8 +174,8 @@ DWORD WINAPI mailThread(LPVOID arg) {
 LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) {
   
 	PAINTSTRUCT ps;
-	static int posX = 10;
-	int posY;
+	static int posX = 100;
+	int posY = 100;
 	HANDLE context;
 	static DWORD color = 0;
   
@@ -197,8 +197,8 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 
 							/* here we draw a simple sinus curve in the window    */
 							/* just to show how pixels are drawn                  */
-			posX += 4;
-			posY = (int) (10 * sin(posX / (double) 30) + 20);
+			//posX += 4;
+			//posY -= 2; //(int) (10 * sin(posX / (double) 30) + 20);
 			SetPixel(hDC, posX % 547, posY, (COLORREF) color);
 			color += 12;
 			windowRefreshTimer (hWnd, UPDATE_FREQ);
