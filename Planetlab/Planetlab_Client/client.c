@@ -10,6 +10,9 @@
 * NOTE: the server must be started BEFORE the
 * client.
 *********************************************/
+
+// HEJ FUNKAR DET???
+
 #include <stdio.h>
 #include <windows.h>
 #include <string.h>
