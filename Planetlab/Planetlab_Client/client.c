@@ -26,10 +26,10 @@ void main(void)
 
 	mailSlot = mailslotConnect(Slot); 
 
-	if (mailSlot == INVALID_HANDLE_VALUE) 
+	while (mailSlot == INVALID_HANDLE_VALUE) 
 	{
 		printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
-		return;
+		mailSlot = mailslotConnect(Slot); 
 	}
 
 	/* NOTE: replace code below for sending planet data to the server. */
