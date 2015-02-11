@@ -46,7 +46,7 @@ void main(void)
 		/*(struct pt*)malloc(sizeof(struct pt));  // Malloc = Allocates a block of size bytes of memory
 		strcpy_s(planet->name, sizeof(planet->name), "Första planeten");*/
 		
-		bytesWritten = mailslotWrite (mailSlot, (void*)&planet, sizeof(planet));		//MESSAGE, strlen(MESSAGE));	//Send planet instead of message
+		bytesWritten = mailslotWrite (mailSlot, (void*)&planet, sizeof(planet));
 
 		if (bytesWritten!=-1)
 			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, planet.name);
