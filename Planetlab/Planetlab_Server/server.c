@@ -125,7 +125,8 @@ DWORD WINAPI mailThread(LPVOID arg) {
 	/* NOTE: The name of a mailslot must start with "\\\\.\\mailslot\\"  */
 
 
-	mailbox = mailslotCreate (Slot);
+	//mailbox = mailslotCreate(Slot);
+	mailbox = mailslotConnect(Slot);
 
 
 	for(;;) 
