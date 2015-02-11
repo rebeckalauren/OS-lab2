@@ -36,10 +36,10 @@ void main(void)
 	/* NOTE: replace code below for sending planet data to the server. */
 	while(loops-- > 0) 
 	{
-		/* send a friendly greeting to the server */
-		/* NOTE: The messages sent to the server need not to be of equal size.       */
-		/* Messages can be of different sizes as long as they don't exceed the       */
-		/* maximum message size that the mailslot can handle (defined upon creation).*/
+		/* send a friendly greeting to the server 
+		NOTE: The messages sent to the server need not to be of equal size.
+		Messages can be of different sizes as long as they don't exceed the
+		maximum message size that the mailslot can handle (defined upon creation).*/
 
 		bytesWritten = mailslotWrite (mailSlot, MESSAGE, strlen(MESSAGE));
 		if (bytesWritten!=-1)
@@ -50,8 +50,7 @@ void main(void)
 
 	mailslotClose (mailSlot);
 
-	/* (sleep for a while, enables you to catch a glimpse of what the */
-	/*  client prints on the console)                                 */
+/* (sleep for a while, enables you to catch a glimpse of what the client prints on the console) */
 	Sleep(2000);
 	return;
 }

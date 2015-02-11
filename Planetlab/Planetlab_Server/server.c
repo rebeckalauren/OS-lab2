@@ -171,7 +171,8 @@ DWORD WINAPI mailThread(LPVOID arg) {
 \********************************************************************/
 /* NOTE: This function is called by Windows when something happens to our window */
 
-LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) {
+LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) 
+{
 
 	PAINTSTRUCT ps;
 	static int posX = 10;
@@ -179,7 +180,8 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 	HANDLE context;
 	static DWORD color = 0;
 
-	switch( msg ) {
+	switch( msg ) 
+	{
 		/**************************************************************/
 		/*    WM_CREATE:        (received on window creation)
 		/**************************************************************/
