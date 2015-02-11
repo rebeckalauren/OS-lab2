@@ -41,8 +41,10 @@ void main(void)
 		/* Messages can be of different sizes as long as they don't exceed the       */
 		/* maximum message size that the mailslot can handle (defined upon creation).*/
 
+
 		struct pt *planet = (struct pt*)malloc(sizeof(struct pt));  // Malloc = Allocates a block of size bytes of memory
 		bytesWritten = mailslotWrite (mailSlot, planet, 424); //MESSAGE, strlen(MESSAGE));			//Send planet instead of message
+
 		if (bytesWritten!=-1)
 			printf("data sent to server (bytes = %d)\n", bytesWritten);
 		else
