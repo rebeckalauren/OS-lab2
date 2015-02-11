@@ -134,7 +134,9 @@ DWORD WINAPI mailThread(LPVOID arg) {
 							/* displays them in the presentation window                               */
 							/* NOTE: binary data can also be sent and received, e.g. planet structures*/
  
-	bytesRead = mailslotRead (mailbox, buffer, strlen(buffer)); // Ta emot en planet
+	struct pt *planet = (struct pt*)malloc(sizeof(struct pt));  // Malloc = Allocates a block of size bytes of memory
+	bytesRead = mailslotRead (mailbox, planet, 424); // Ta emot en planet (strlen(buffer)
+	
 																// Skapa ny tråd för varje planet
 
 		if(bytesRead!= 0) 
