@@ -24,7 +24,7 @@ void main(void)
 	DWORD bytesWritten;
 	int loops = 2000;
 
-	mailSlot = mailslotConnect("mailbox"); 
+	mailSlot = mailslotConnect("\\\\.\\mailslot\\sample_mailslot"); 
 
 	if (mailSlot == INVALID_HANDLE_VALUE) 
 	{
@@ -41,7 +41,7 @@ void main(void)
 		/* Messages can be of different sizes as long as they don't exceed the       */
 		/* maximum message size that the mailslot can handle (defined upon creation).*/
 
-		bytesWritten = mailslotWrite (mailSlot, MESSAGE, strlen(MESSAGE));
+		bytesWritten = mailslotWrite (mailSlot, MESSAGE, strlen(MESSAGE));			//Send planet instead of message
 		if (bytesWritten!=-1)
 			printf("data sent to server (bytes = %d)\n", bytesWritten);
 		else

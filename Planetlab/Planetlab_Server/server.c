@@ -114,19 +114,17 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdL
 /********************************************************************/
 DWORD WINAPI mailThread(LPVOID arg) {
 
-	HANDLE WriteHandle;
+
 	char buffer[1024];
 	DWORD bytesRead;
 	static int posY = 0;
 	HANDLE mailbox;
-	LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
-	WriteHandle = mailslotConnect(Slot);
 							/* create a mailslot that clients can use to pass requests through   */
 							/* (the clients use the name below to get contact with the mailslot) */
 							/* NOTE: The name of a mailslot must start with "\\\\.\\mailslot\\"  */
 
 	
-	mailbox = mailslotCreate ("mailbox");
+	mailbox = mailslotCreate ("\\\\.\\mailslot\\sample_mailslot");
 
 
 	for(;;) 
@@ -136,7 +134,8 @@ DWORD WINAPI mailThread(LPVOID arg) {
 							/* displays them in the presentation window                               */
 							/* NOTE: binary data can also be sent and received, e.g. planet structures*/
  
-	bytesRead = mailslotRead (mailbox, buffer, strlen(buffer)); 
+	bytesRead = mailslotRead (mailbox, buffer, strlen(buffer)); // Ta emot en planet
+																// Skapa ny tråd för varje planet
 
 		if(bytesRead!= 0) 
 		{
