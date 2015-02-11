@@ -43,6 +43,8 @@ void main(void)
 		
 		
 		struct pt *planet = (struct pt*)malloc(sizeof(struct pt));  // Malloc = Allocates a block of size bytes of memory
+		strcpy_s(planet->name, sizeof(planet->name), "Första planeten");
+		
 		bytesWritten = mailslotWrite (mailSlot, planet, 424);		//MESSAGE, strlen(MESSAGE));			//Send planet instead of message
 
 		if (bytesWritten!=-1)
