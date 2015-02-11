@@ -68,7 +68,7 @@ void main(void)
 		bytesWritten = mailslotWrite (mailSlot, planet, 424);		//MESSAGE, strlen(MESSAGE));	//Send planet instead of message
 
 		if (bytesWritten!=-1)
-			printf("data sent to server (bytes = %d)\n", bytesWritten);
+			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, planet->name);
 		else
 			printf("failed sending data to server\n");
 	}
