@@ -6,8 +6,6 @@
 #define TIMERID			100  /* id for timer that is used by the thread that manages the window where graphics is drawn */
 #define DEFAULT_STACK_SIZE	1024
 #define TIME_OUT			MAILSLOT_WAIT_FOREVER 
-
-
 /* ATTENTION!!! calls that require a time out, use TIME_OUT constant, specifies that calls are blocked forever */
 
 DWORD threadCreate (LPTHREAD_START_ROUTINE threadFunc, LPVOID threadParams) 
