@@ -24,9 +24,7 @@ void main(void)
 	DWORD bytesWritten;
 	int loops = 2000;
 
-	mailSlot = mailslotCreate(Slot);
-
-	//mailSlot = mailslotConnect(Slot); 
+	mailSlot = mailslotConnect(Slot); 
 
 	while (mailSlot == INVALID_HANDLE_VALUE) 
 	{
