@@ -76,21 +76,5 @@ void createPlanet(char name,
 	planet->mass = mass;											
 	planet->life = life;
 
-		/* 
-		typedef struct pt 
-		{
-			char		name[20];	// Name of planet
-			double		sx;			// X-axis position
-			double		sy;			// Y-axis position
-			double		vx;			// X-axis velocity
-			double		vy;			// Y-axis velocity
-			double		mass;		// Planet mass
-			struct pt*	next;		// Pointer to next planet in linked list
-			int			life;		// Planet life
-			char		pid[30];	// String containing ID of creating process
-		} planet_type;
-		
-		
-		*/
 	return (void)planet;
 }
