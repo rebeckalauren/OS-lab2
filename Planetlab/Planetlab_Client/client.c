@@ -21,6 +21,8 @@
 void main(void) 
 {
 
+
+	// HEJ HEJ!!
 	HANDLE mailSlot;
 	DWORD bytesWritten;
 	int loops = 2000;
