@@ -15,7 +15,7 @@
 #include <windows.h>
 #include <string.h>
 #include "wrapper.h"
-
+LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 #define MESSAGE "Hej på dig!"
 
 void main(void) 
@@ -24,7 +24,7 @@ void main(void)
 	DWORD bytesWritten;
 	int loops = 2000;
 
-	mailSlot = mailslotConnect("\\\\.\\mailslot\\sample_mailslot"); 
+	mailSlot = mailslotConnect(Slot); 
 
 	if (mailSlot == INVALID_HANDLE_VALUE) 
 	{

@@ -30,7 +30,7 @@
 /* here is the timer id and timer period defined                          */
 
 #define UPDATE_FREQ     10	/* update frequency (in ms) for the timer */
-
+LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 /* (the server uses a mailslot for incoming client requests) */
 
 
@@ -124,7 +124,7 @@ DWORD WINAPI mailThread(LPVOID arg) {
 	/* NOTE: The name of a mailslot must start with "\\\\.\\mailslot\\"  */
 
 
-	mailbox = mailslotCreate ("\\\\.\\mailslot\\sample_mailslot");
+	mailbox = mailslotCreate (Slot);
 
 
 	for(;;) 
