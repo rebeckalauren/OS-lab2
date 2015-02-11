@@ -54,7 +54,7 @@ int mailslotWrite(HANDLE mailSlot, void *msg, int msgSize)
 		&cbWritten,			
 		(LPOVERLAPPED) NULL);
 
-	return 1;
+	return cbWritten;
 }
 
 int	mailslotRead (HANDLE mailbox, void *msg, int msgSize) 

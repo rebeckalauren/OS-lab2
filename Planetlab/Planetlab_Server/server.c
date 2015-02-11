@@ -130,31 +130,29 @@ DWORD WINAPI mailThread(LPVOID arg) {
 
 	for(;;) 
 	{				
-		/* (ordinary file manipulating functions are used to read from mailslots) */
-		/* in this example the server receives strings from the client side and   */
-		/* displays them in the presentation window                               */
-		/* NOTE: binary data can also be sent and received, e.g. planet structures*/
+		/* (ordinary file manipulating functions are used to read from mailslots) 
+		 in this example the server receives strings from the client side and   
+		 displays them in the presentation window                               
+		 NOTE: binary data can also be sent and received, e.g. planet structures*/
 
 		struct pt *planet = NULL; 
-		bytesRead = mailslotRead (mailbox, planet, 424); // Ta emot en planet (strlen(buffer)
+		bytesRead = mailslotRead (mailbox, planet, sizeof(planet)); // Ta emot en planet (strlen(buffer)
 
 		// Skapa ny tråd för varje planet
-
+		
 		if(bytesRead!= 0) 
 		{
+			
+			printf("%s" ,planet->name);
 
-			printf(planet->name);
-
-			/* NOTE: It is appropriate to replace this code with something */
-			/*       that match your needs here.                           */
+			/* NOTE: It is appropriate to replace this code with something that match your needs here.*/
 			posY++;  
 			/* (hDC is used reference the previously created window) */							
 			TextOut(hDC, 10, 50+posY%200, buffer, bytesRead);
 		}
 		else 
 		{
-			/* failed reading from mailslot                              */
-			/* (in this example we ignore this, and happily continue...) */
+			/* failed reading from mailslot(in this example we ignore this, and happily continue...) */
 		}
 	}
 
