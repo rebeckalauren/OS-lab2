@@ -136,7 +136,9 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		 NOTE: binary data can also be sent and received, e.g. planet structures*/
 
 		struct pt *planet = NULL; 
-		bytesRead = mailslotRead (mailbox, planet, sizeof(planet)); // Ta emot en planet (strlen(buffer)
+		
+		bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
+		//bytesRead = mailslotRead (mailbox, planet, sizeof(planet));
 
 		// Skapa ny tråd för varje planet
 		
@@ -152,7 +154,7 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		}
 		else 
 		{
-			/* failed reading from mailslot(in this example we ignore this, and happily continue...) */
+			/* failed reading from mailslot (in this example we ignore this, and happily continue...) */
 		}
 	}
 
