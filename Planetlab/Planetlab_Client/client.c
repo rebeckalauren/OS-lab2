@@ -29,7 +29,7 @@ void main(void)
 	while (mailSlot == INVALID_HANDLE_VALUE) 
 	{
 		printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
-		mailSlot = mailslotConnect("\\\\.\\mailslot\\sample_mailslot"); //Slot
+		mailSlot = mailslotConnect(Slot);
 	}
 
 	/* NOTE: replace code below for sending planet data to the server. */
@@ -40,19 +40,16 @@ void main(void)
 		/* NOTE: The messages sent to the server need not to be of equal size.       */
 		/* Messages can be of different sizes as long as they don't exceed the       */
 		/* maximum message size that the mailslot can handle (defined upon creation).*/
-		
-		
-		struct pt *planet = (struct pt*)malloc(sizeof(struct pt));  // Malloc = Allocates a block of size bytes of memory
-		
-		strcpy_s(planet->name, sizeof(planet->name), "Första planeten");
-		
 	
-
+		struct pt planet = {"Planet1",0,0,0,0,0,0,0,0}; 
+		// (struct pt*)malloc(sizeof(struct pt));  // Malloc = Allocates a block of size bytes of memory
 		
-		bytesWritten = mailslotWrite (mailSlot, planet, 424);		//MESSAGE, strlen(MESSAGE));	//Send planet instead of message
+		//strcpy_s(planet->name, sizeof(planet->name), "Första planeten");
+		
+		bytesWritten = mailslotWrite (mailSlot, (void*)&planet, sizeof(planet));		//MESSAGE, strlen(MESSAGE));	//Send planet instead of message
 
 		if (bytesWritten!=-1)
-			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, planet->name);
+			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, planet.name);
 		else
 			printf("failed sending data to server\n");
 	}
