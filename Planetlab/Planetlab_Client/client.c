@@ -24,12 +24,14 @@ void main(void)
 	DWORD bytesWritten;
 	int loops = 2000;
 
-	mailSlot = mailslotConnect(Slot); 
+	mailSlot = mailslotCreate(Slot);
+
+	//mailSlot = mailslotConnect(Slot); 
 
 	while (mailSlot == INVALID_HANDLE_VALUE) 
 	{
 		printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
-		mailSlot = mailslotConnect(Slot); 
+		mailSlot = mailslotConnect("\\\\.\\mailslot\\sample_mailslot"); //Slot
 	}
 
 	/* NOTE: replace code below for sending planet data to the server. */
@@ -52,15 +54,14 @@ void main(void)
 		bytesWritten = mailslotWrite (mailSlot, planet, 424);		//MESSAGE, strlen(MESSAGE));	//Send planet instead of message
 
 		if (bytesWritten!=-1)
-			printf("data sent to server (bytes = %d)\n", bytesWritten);
+			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, planet->name);
 		else
 			printf("failed sending data to server\n");
 	}
 
 	mailslotClose (mailSlot);
 
-	/* (sleep for a while, enables you to catch a glimpse of what the */
-	/*  client prints on the console)                                 */
+	/*(sleep for a while, enables you to catch a glimpse of what the client prints on the console)*/
 	Sleep(2000);
 	return;
 }

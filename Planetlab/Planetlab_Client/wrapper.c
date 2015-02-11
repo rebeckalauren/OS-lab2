@@ -36,7 +36,7 @@ HANDLE mailslotConnect (char *name)
 			OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (h == INVALID_HANDLE_VALUE)
 	{
-		printf("Couldn't connect to mailslot");
+		printf("Couldn't connect to mailslot \n");
 		return NULL;
 	}
 	printf("Connected to mailslot.\n");
