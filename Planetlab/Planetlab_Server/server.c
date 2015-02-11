@@ -98,7 +98,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdL
 
 	/* (the message processing loop that all windows applications must have) */
 	/* NOTE: just leave it as it is. */
-	while( GetMessage( &msg, NULL, 0, 0 ) ) {
+	while( GetMessage( &msg, NULL, 0, 0 ) ) 
+	{
 		TranslateMessage( &msg );
 		DispatchMessage( &msg );
 	}
