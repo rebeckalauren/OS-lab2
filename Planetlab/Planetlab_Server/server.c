@@ -141,7 +141,7 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		
 		//bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
 		bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
-
+		threadCreate(checkPlanets, );
 		// Skapa ny tråd för varje planet
 		
 		if(bytesRead!= 0) 
@@ -248,7 +248,7 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 }
 
 
-void createPlanet(char name, double mass, double Xposition, double Yposition, double Xvelocity, double Yvelocity, int life)
+void createPlanet(char* name, double mass, double Xposition, double Yposition, double Xvelocity, double Yvelocity, int life)
 {
 	
 	struct pt newplanet;
@@ -263,12 +263,12 @@ void createPlanet(char name, double mass, double Xposition, double Yposition, do
 
 	return (void)newplanet;
 }
-void checkPlanets()
+void checkPlanets(struct pt Testplanet)
 {
 	if(root == 0)
 	{
 		//create root
-		createPlanet();
+		createPlanet(Testplanet.name, Testplanet.mass, Testplanet.sx, Testplanet.sy, Testplanet.vx, Testplanet.vy, Testplanet.life);
 	}
 	else
 	{
@@ -277,7 +277,7 @@ void checkPlanets()
 		{
 			iterator = iterator->next;
 		}
-		createPlanet();
+		createPlanet(Testplanet.name, Testplanet.mass, Testplanet.sx, Testplanet.sy, Testplanet.vx, Testplanet.vy, Testplanet.life);
 		//create planet last in the linked list
 	}
 }
