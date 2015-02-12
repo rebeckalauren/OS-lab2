@@ -32,6 +32,8 @@
 #define UPDATE_FREQ     10	/* update frequency (in ms) for the timer */
 LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 /* (the server uses a mailslot for incoming client requests) */
+struct pt* root;
+struct pt* iterator;
 
 
 
@@ -135,17 +137,17 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		 displays them in the presentation window                               
 		 NOTE: binary data can also be sent and received, e.g. planet structures*/
 
-		struct pt *planet = NULL; 
+		struct pt planet;													//ska va så här
 		
-		bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
-		//bytesRead = mailslotRead (mailbox, planet, sizeof(planet));
+		//bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
+		bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
 
 		// Skapa ny tråd för varje planet
 		
 		if(bytesRead!= 0) 
 		{
 			
-			printf("%s" ,planet->name);
+			printf("%s" ,planet.name);
 
 			/* NOTE: It is appropriate to replace this code with something that match your needs here.*/
 			posY++;  
@@ -246,5 +248,36 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 }
 
 
+void createPlanet(char name, double mass, double Xposition, double Yposition, double Xvelocity, double Yvelocity, int life)
+{
+	
+	struct pt newplanet;
 
+	strcpy_s(newplanet.name, sizeof(newplanet.name), "Första planeten");
+	newplanet.sx = Xposition;											
+	newplanet.sy = Yposition;											
+	newplanet.vx = Xvelocity;											
+	newplanet.vy = Yvelocity;											
+	newplanet.mass = mass;											
+	newplanet.life = life;
 
+	return (void)newplanet;
+}
+void checkPlanets()
+{
+	if(root == 0)
+	{
+		//create root
+		createPlanet();
+	}
+	else
+	{
+		iterator = root;
+		while(iterator->next != NULL)
+		{
+			iterator = iterator->next;
+		}
+		createPlanet();
+		//create planet last in the linked list
+	}
+}

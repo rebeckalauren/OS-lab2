@@ -61,20 +61,4 @@ void main(void)
 	return;
 }
 
-void createPlanet(char name, 
-				double mass, double Xposition, 
-				double Yposition, double Xvelocity, 
-				double Yvelocity, int life)
-{
-	struct pt *planet = (struct pt*)malloc(sizeof(struct pt));
 
-	strcpy_s(planet->name, sizeof(planet->name), "Första planeten");
-	planet->sx = Xposition;											
-	planet->sy = Yposition;											
-	planet->vx = Xvelocity;											
-	planet->vy = Yvelocity;											
-	planet->mass = mass;											
-	planet->life = life;
-
-	return (void)planet;
-}
