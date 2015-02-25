@@ -121,7 +121,6 @@ DWORD WINAPI mailThread(LPVOID arg) {
 	/* (the clients use the name below to get contact with the mailslot) */
 	/* NOTE: The name of a mailslot must start with "\\\\.\\mailslot\\"  */
 
-
 	mailbox = mailslotCreate(Slot);
 
 
@@ -136,7 +135,7 @@ DWORD WINAPI mailThread(LPVOID arg) {
 
 		//bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
 		bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
-		threadCreate(checkPlanets, );
+		
 		// Skapa ny tråd för varje planet
 
 		if(bytesRead!= 0) 
@@ -201,7 +200,13 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 		/* just to show how pixels are drawn                  */
 		//posX += 4;
 		//posY -= 2; //(int) (10 * sin(posX / (double) 30) + 20);
-		SetPixel(hDC, posX % 547, posY, (COLORREF) color);
+		iterator = root;
+		while(iterator != NULL)
+		{
+			SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);//(hDC, posX % 547, posY, (COLORREF) color);
+			iterator = iterator->next;
+		}
+		
 		color += 12;
 		windowRefreshTimer (hWnd, UPDATE_FREQ);
 		break;
@@ -258,12 +263,13 @@ void createPlanet(char* name, double mass, double Xposition, double Yposition, d
 
 	return (void)newplanet;
 }
-void checkPlanets(struct pt Testplanet)
+void checkPlanets(struct pt* Testplanet)
 {
 	if(root == 0)
 	{
 		//create root
-		createPlanet(Testplanet.name, Testplanet.mass, Testplanet.sx, Testplanet.sy, Testplanet.vx, Testplanet.vy, Testplanet.life);
+		root = Testplanet;
+		createPlanet(root->name, root->mass, root->sx, root->sy, root->vx, root->vy, root->life);
 	}
 	else
 	{
@@ -272,7 +278,8 @@ void checkPlanets(struct pt Testplanet)
 		{
 			iterator = iterator->next;
 		}
-		createPlanet(Testplanet.name, Testplanet.mass, Testplanet.sx, Testplanet.sy, Testplanet.vx, Testplanet.vy, Testplanet.life);
+		iterator = Testplanet;
+		createPlanet(iterator->name, iterator->mass, iterator->sx, iterator->sy, iterator->vx, iterator->vy, iterator->life);
 		//create planet last in the linked list
 	}
 }
