@@ -146,6 +146,7 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		if(bytesRead!= 0) 
 		{
 			planet = (struct pt*)buffer;
+		//	threadCreate(updatePlanets, 0);
 			checkPlanets(planet);
 			printf("%s" ,planet->name);
 
@@ -211,9 +212,10 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 		{
 			SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);//(hDC, posX % 547, posY, (COLORREF) color);
 			iterator = iterator->next;
+			
 		}
 		
-		color += 12;
+
 		windowRefreshTimer (hWnd, UPDATE_FREQ);
 		break;
 		/****************************************************************\
@@ -282,8 +284,13 @@ void checkPlanets(struct pt *Testplanet)
 		{
 			iterator = iterator->next;
 		}
-		iterator = Testplanet;
+		iterator->next = Testplanet;
 		createPlanet(iterator->name, iterator->mass, iterator->sx, iterator->sy, iterator->vx, iterator->vy, iterator->life);
 		//create planet last in the linked list
 	}
+}
+
+DWORD WINAPI updatePlanets(LPVOID lpParam)
+{
+	
 }
