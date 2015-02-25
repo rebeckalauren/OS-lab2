@@ -140,9 +140,9 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		
 		//bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
 		bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
-		//checkPlanets(&planet);
+		checkPlanets(&planet);
 		// Skapa ny tråd för varje planet
-		threadCreate(checkPlanets, 0);
+		//threadCreate(checkPlanets, 0);
 		
 		if(bytesRead!= 0) 
 		{
