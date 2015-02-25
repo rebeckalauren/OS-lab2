@@ -17,7 +17,6 @@
 #include "wrapper.h"
 LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 #define MESSAGE "Hej på dig!"
-
 void main(void) 
 {
 	HANDLE mailSlot;
@@ -40,9 +39,9 @@ void main(void)
 		/* NOTE: The messages sent to the server need not to be of equal size.       */
 		/* Messages can be of different sizes as long as they don't exceed the       */
 		/* maximum message size that the mailslot can handle (defined upon creation).*/
-	
-		struct pt planet = {"Planet1",0,0,0,0,0,0,0,0}; 
 		
+		
+		struct pt planet = {"Planet1",0,0,0,0,0,0,0,0}; 
 		/*(struct pt*)malloc(sizeof(struct pt));  // Malloc = Allocates a block of size bytes of memory
 		strcpy_s(planet->name, sizeof(planet->name), "Första planeten");*/
 		

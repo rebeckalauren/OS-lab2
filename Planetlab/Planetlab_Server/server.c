@@ -46,8 +46,6 @@ struct pt* iterator;
 LRESULT WINAPI MainWndProc( HWND, UINT, WPARAM, LPARAM );
 DWORD WINAPI mailThread(LPVOID);
 
-
-
 HDC hDC;		/* Handle to Device Context, gets set 1st time in MainWndProc */
 /* we need it to access the window for printing and drawin */
 
@@ -86,7 +84,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdL
 
 	windowRefreshTimer (hWnd, UPDATE_FREQ);
 
-
 	/* create a thread that can handle incoming client requests */
 	/* (the thread starts executing in the function mailThread) */
 
@@ -94,9 +91,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdL
 	/*       this function does and what its parameters mean.   */
 	/* We have no parameters to pass, hence NULL				*/
 
-
 	threadID = threadCreate (mailThread, NULL); 
-
 
 	/* (the message processing loop that all windows applications must have) */
 	/* NOTE: just leave it as it is. */
@@ -133,21 +128,20 @@ DWORD WINAPI mailThread(LPVOID arg) {
 	for(;;) 
 	{				
 		/* (ordinary file manipulating functions are used to read from mailslots) 
-		 in this example the server receives strings from the client side and   
-		 displays them in the presentation window                               
-		 NOTE: binary data can also be sent and received, e.g. planet structures*/
+		in this example the server receives strings from the client side and   
+		displays them in the presentation window                               
+		NOTE: binary data can also be sent and received, e.g. planet structures*/
 
 		struct pt planet;													//ska va så här
-		
+
 		//bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
 		bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
-
-		
+		threadCreate(checkPlanets, );
 		// Skapa ny tråd för varje planet
-		
+
 		if(bytesRead!= 0) 
 		{
-			
+
 			printf("%s" ,planet.name);
 
 			/* NOTE: It is appropriate to replace this code with something that match your needs here.*/
@@ -179,8 +173,8 @@ DWORD WINAPI mailThread(LPVOID arg) {
 \********************************************************************/
 /* NOTE: This function is called by Windows when something happens to our window */
 
-LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) {
-
+LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) 
+{
 	PAINTSTRUCT ps;
 	static int posX = 100;
 	int posY = 100;
@@ -251,7 +245,7 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 
 void createPlanet(char* name, double mass, double Xposition, double Yposition, double Xvelocity, double Yvelocity, int life)
 {
-	
+
 	struct pt newplanet;
 
 	strcpy_s(newplanet.name, sizeof(newplanet.name), "Första planeten");
