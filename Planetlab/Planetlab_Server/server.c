@@ -252,10 +252,8 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 	return 0;
 }
 
-
 void createPlanet(char* name, double mass, double Xposition, double Yposition, double Xvelocity, double Yvelocity, int life)
 {
-	
 	struct pt newplanet;
 
 	strcpy_s(newplanet.name, sizeof(newplanet.name), "Första planeten");
