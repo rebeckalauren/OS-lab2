@@ -136,18 +136,17 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		 displays them in the presentation window                               
 		 NOTE: binary data can also be sent and received, e.g. planet structures*/
 
-		struct pt planet;													//ska va så här
-		
-		//bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
-		bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
-		//checkPlanets(&planet);
+		struct pt *planet;													//ska va så här
+		char buffer[1000]; 
+		bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
+		//bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
 		// Skapa ny tråd för varje planet
-		threadCreate(checkPlanets, 0);
 		
 		if(bytesRead!= 0) 
 		{
-			
-			printf("%s" ,planet.name);
+			planet = (struct pt*)buffer;
+			checkPlanets(planet);
+			printf("%s" ,planet->name);
 
 			/* NOTE: It is appropriate to replace this code with something that match your needs here.*/
 			posY++;  
@@ -267,9 +266,9 @@ void createPlanet(char* name, double mass, double Xposition, double Yposition, d
 
 	return (void)newplanet;
 }
-void checkPlanets(struct pt* Testplanet)
+void checkPlanets(struct pt *Testplanet)
 {
-	if(root == 0)
+	if(root == NULL)
 	{
 		//create root
 		root = Testplanet;
