@@ -140,7 +140,7 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		
 		//bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
 		bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
-		
+		//checkPlanets(&planet);
 		// Skapa ny tråd för varje planet
 		threadCreate(checkPlanets, 0);
 		
@@ -253,10 +253,8 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 	return 0;
 }
 
-
 void createPlanet(char* name, double mass, double Xposition, double Yposition, double Xvelocity, double Yvelocity, int life)
 {
-	
 	struct pt newplanet;
 
 	strcpy_s(newplanet.name, sizeof(newplanet.name), "Första planeten");
