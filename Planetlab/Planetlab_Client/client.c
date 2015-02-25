@@ -20,9 +20,9 @@ LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 void main(void) 
 {
 	struct pt newplanet;
-
+	double x, y;
 	int a = 1;
-	int b = 2;
+	int b = 4;
 	char message[100000];
 	HANDLE mailSlot;
 	DWORD bytesWritten;
@@ -38,7 +38,7 @@ void main(void)
 
 	/* NOTE: replace code below for sending planet data to the server. */
 
-	while(1) 
+	while(a<b) 
 	{
 		/* send a friendly greeting to the server */
 		/* NOTE: The messages sent to the server need not to be of equal size.       */
@@ -47,8 +47,14 @@ void main(void)
 		
 			
 			strcpy_s(newplanet.name, sizeof(newplanet.name), "Första planeten");
-			newplanet.sx = fgets(message, sizeof (message), stdin);											
-			newplanet.sy = 100;											
+			printf("x-position");
+			fgets(message, sizeof (message), stdin);
+			sscanf_s(message, "%lf", &x);
+			printf("y-position");
+			fgets(message, sizeof (message), stdin);
+			sscanf_s(message, "%lf", &y);
+			newplanet.sx = x;											
+			newplanet.sy = y;											
 			newplanet.vx = 1;											
 			newplanet.vy = 1;											
 			newplanet.mass = 50;											
