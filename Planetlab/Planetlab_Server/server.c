@@ -34,7 +34,7 @@ LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 /* (the server uses a mailslot for incoming client requests) */
 struct pt* root;
 struct pt* iterator;
-
+void checkPlanets(struct pt* Testplanet);
 
 
 /*********************  Prototypes  ***************************/
@@ -142,6 +142,7 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
 		
 		// Skapa ny tråd för varje planet
+		threadCreate(checkPlanets, 0);
 		
 		if(bytesRead!= 0) 
 		{
