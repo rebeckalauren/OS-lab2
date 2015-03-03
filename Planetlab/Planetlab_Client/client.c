@@ -73,7 +73,6 @@ void main(void)
 		fgets(message, sizeof (message), stdin);
 		sscanf_s(message, "%lf", &_life);
 
-
 		newplanet.sx = _sx;											
 		newplanet.sy = _sy;											
 		newplanet.vx = _vy;											
