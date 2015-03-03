@@ -20,7 +20,7 @@ LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 void main(void) 
 {
 	struct pt newplanet;
-	double x, y;
+	double _sx, _sy, _vx, _vy, _mass, _life;
 	char planetName[100];
 	int a = 1;
 	int b = 4;
@@ -48,22 +48,38 @@ void main(void)
 
 		printf("Name of planet");
 		gets_s(newplanet.name,sizeof(newplanet.name));
-		
+
 		printf("x-position");
 		fgets(message, sizeof (message), stdin);
-		sscanf_s(message, "%lf", &x);
-		
+		sscanf_s(message, "%lf", &_sx);
+
 		printf("y-position");
 		fgets(message, sizeof (message), stdin);
-		sscanf_s(message, "%lf", &y);
-		
-		//strcpy_s(newplanet.name, sizeof(newplanet.name), planetName);
-		newplanet.sx = x;											
-		newplanet.sy = y;											
-		newplanet.vx = 1;											
-		newplanet.vy = 1;											
-		newplanet.mass = 60;											
-		newplanet.life = 60;
+		sscanf_s(message, "%lf", &_sy);
+
+		printf("x-velocity");
+		fgets(message, sizeof (message), stdin);
+		sscanf_s(message, "%lf", &_vx);
+
+		printf("y-velocity");
+		fgets(message, sizeof (message), stdin);
+		sscanf_s(message, "%lf", &_vy);
+
+		printf("planet mass");
+		fgets(message, sizeof (message), stdin);
+		sscanf_s(message, "%lf", &_mass);
+
+		printf("planet life");
+		fgets(message, sizeof (message), stdin);
+		sscanf_s(message, "%lf", &_life);
+
+
+		newplanet.sx = _sx;											
+		newplanet.sy = _sy;											
+		newplanet.vx = _vy;											
+		newplanet.vy = _vx;											
+		newplanet.mass = _mass;											
+		newplanet.life = _life;
 		newplanet.next = NULL;
 
 		//struct pt planet = {"Planet1",0,0,0,0,0,0,0,0}; 
