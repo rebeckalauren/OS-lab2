@@ -35,8 +35,7 @@ LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 struct pt* root;
 struct pt* iterator;
 void checkPlanets(struct pt* Testplanet);
-
-
+void createPlanet(char*, double, double, double, double, double, int);
 /*********************  Prototypes  ***************************/
 /* NOTE: Windows has defined its own set of types. When the   */
 /*       types are of importance to you we will write comments*/ 
@@ -207,15 +206,21 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 		/* just to show how pixels are drawn                  */
 		//posX += 4;
 		//posY -= 2; //(int) (10 * sin(posX / (double) 30) + 20);
-		iterator = root;
-		while(iterator != NULL)
-		{
-			SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);//(hDC, posX % 547, posY, (COLORREF) color);
-			iterator = iterator->next;
-			
-		}
-		
 
+		if(root != NULL)
+		{
+			iterator = root;
+			while(iterator != NULL)
+			{
+				SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);//(hDC, posX % 547, posY, (COLORREF) color);
+				if(iterator->next != NULL)
+				{
+					iterator = iterator->next;
+				}
+				else
+					break;
+			}
+		}
 		windowRefreshTimer (hWnd, UPDATE_FREQ);
 		break;
 		/****************************************************************\
@@ -266,6 +271,7 @@ void createPlanet(char* name, double mass, double Xposition, double Yposition, d
 	newplanet.vy = Yvelocity;											
 	newplanet.mass = mass;											
 	newplanet.life = life;
+	//newplanet.next = NULL;
 
 	return (void)newplanet;
 }
@@ -285,12 +291,13 @@ void checkPlanets(struct pt *Testplanet)
 			iterator = iterator->next;
 		}
 		iterator->next = Testplanet;
+		iterator = iterator->next;
 		createPlanet(iterator->name, iterator->mass, iterator->sx, iterator->sy, iterator->vx, iterator->vy, iterator->life);
 		//create planet last in the linked list
 	}
 }
 
-DWORD WINAPI updatePlanets(LPVOID lpParam)
+DWORD WINAPI updatePlanets(LPVOID lpParam) // Ska uppdatera rutan och flytta planeternas pixlar
 {
 	
 }
