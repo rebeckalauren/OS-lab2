@@ -57,8 +57,8 @@ void main(void)
 			newplanet.sy = y;											
 			newplanet.vx = 1;											
 			newplanet.vy = 1;											
-			newplanet.mass = 50;											
-			newplanet.life = 50;
+			newplanet.mass = 60;											
+			newplanet.life = 60;
 			newplanet.next = NULL;
 
 
