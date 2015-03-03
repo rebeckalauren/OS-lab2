@@ -132,9 +132,9 @@ DWORD WINAPI mailThread(LPVOID arg) {
 	for(;;) 
 	{				
 		/* (ordinary file manipulating functions are used to read from mailslots) 
-		 in this example the server receives strings from the client side and   
-		 displays them in the presentation window                               
-		 NOTE: binary data can also be sent and received, e.g. planet structures*/
+		in this example the server receives strings from the client side and   
+		displays them in the presentation window                               
+		NOTE: binary data can also be sent and received, e.g. planet structures*/
 
 		struct pt *planet;													//ska va så här
 		char buffer[1000]; 
@@ -142,11 +142,11 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		//bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
 		// Skapa ny tråd för varje planet
 		//threadCreate(checkPlanets, 0);
-		
+
 		if(bytesRead!= 0) 
 		{
 			planet = (struct pt*)buffer;
-		//	threadCreate(updatePlanets, 0);
+			//	threadCreate(updatePlanets, 0);
 			checkPlanets(planet);
 			printf("%s" ,planet->name);
 
@@ -212,9 +212,8 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 		{
 			SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);//(hDC, posX % 547, posY, (COLORREF) color);
 			iterator = iterator->next;
-			
 		}
-		
+
 
 		windowRefreshTimer (hWnd, UPDATE_FREQ);
 		break;
@@ -292,5 +291,5 @@ void checkPlanets(struct pt *Testplanet)
 
 DWORD WINAPI updatePlanets(LPVOID lpParam)
 {
-	
+
 }
