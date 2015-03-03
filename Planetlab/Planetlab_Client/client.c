@@ -22,8 +22,6 @@ void main(void)
 	struct pt newplanet;
 	double _sx, _sy, _vx, _vy, _mass, _life;
 	char planetName[100];
-	int a = 1;
-	int b = 4;
 	char message[100000];
 	HANDLE mailSlot;
 	DWORD bytesWritten;
@@ -91,7 +89,6 @@ void main(void)
 			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet.name);
 		else
 			printf("failed sending data to server\n");
-		a++;
 	}
 
 	mailslotClose (mailSlot);
