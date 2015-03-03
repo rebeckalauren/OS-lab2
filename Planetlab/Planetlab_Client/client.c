@@ -89,11 +89,10 @@ void main(void)
 			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet.name);
 		else
 			printf("failed sending data to server\n");
-	}
-
-	mailslotClose (mailSlot);
 
 	/*(sleep for a while, enables you to catch a glimpse of what the client prints on the console)*/
 	Sleep(2000);
+	}
+	mailslotClose (mailSlot);
 	return;
 }
