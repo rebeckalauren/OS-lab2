@@ -209,13 +209,13 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 
 		if(root != NULL)
 		{
-			iterator = root;
-			while(iterator != NULL)
-			{
-				SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);//(hDC, posX % 547, posY, (COLORREF) color);
+		iterator = root;
+		while(iterator != NULL)
+		{
+			SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);//(hDC, posX % 547, posY, (COLORREF) color);
 				if(iterator->next != NULL)
 				{
-					iterator = iterator->next;
+			iterator = iterator->next;
 				}
 				else
 					break;
