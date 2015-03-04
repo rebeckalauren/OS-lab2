@@ -27,19 +27,12 @@ void main(void)
 	HANDLE mailSlot;
 	DWORD bytesWritten;
 	int loops = 2000;
-
 	Sleep(2000);
 	mailSlot = mailslotConnect(Slot); 
 
-	//while (mailSlot == INVALID_HANDLE_VALUE) 
-	//{
-	//	system("CLS");
-	//	printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
-	//	mailSlot = mailslotConnect(Slot);
-	//}
-
 	/* NOTE: replace code below for sending planet data to the server. */
 	threadCreate(threadRead, 0);
+	Sleep(2002);
 	while(1) 
 	{
 		/* send a friendly greeting to the server */
@@ -82,10 +75,6 @@ void main(void)
 		newplanet->life = _life;
 		newplanet->next = NULL;
 
-		//struct pt planet = {"Planet1",0,0,0,0,0,0,0,0}; 
-		/*(struct pt*)malloc(sizeof(struct pt));  // Malloc = Allocates a block of size bytes of memory
-		strcpy_s(planet->name, sizeof(planet->name), "Första planeten");*/
-
 		bytesWritten = mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));
 
 		if (bytesWritten!=-1)
@@ -101,9 +90,13 @@ DWORD WINAPI threadRead( LPVOID lpParam ) // read if planet is dead
 {
 	struct pt *newplanet = (struct pt*)malloc(sizeof(struct pt));
 	HANDLE mailSlot;
+	mailSlot = mailslotConnect(Slot);
 	while (1)
 	{
-		//mailslotRead(mailSlot, newplanet, 424);
-			// read if planet is dead
+		int bytesread = mailslotRead(mailSlot, newplanet, 424);
+		if (bytesread > 0)
+			printf("planet: %d died because ? \n", newplanet);
+		// read if planet is dead and why!
 	}
+	mailslotClose (mailSlot);
 }

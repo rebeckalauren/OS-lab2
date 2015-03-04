@@ -249,6 +249,7 @@ void checkPlanets(struct pt *Testplanet)
 
 void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeternas pixlar
 {
+	char messageWhyDie[200];
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
 	double r, a1, totX = 0, totY = 0; 
@@ -275,16 +276,26 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
 		{
 			planet->life = 0;
+			mailslotWrite(Slot, messageWhyDie, 200);
 			//skicka dödsmedelande till clienten
 			//kalla på removeplanet funktionen
 		}
-		planet->life = planet->life -1;		//minska liv med 1
+		planet->life = planet->life - 1;		//minska liv med 1
 		Sleep(UPDATE_FREQ);
 	}
+	//die because life < 1
+	mailslotWrite(Slot, messageWhyDie, 200);
 	//skicka dödsmedelande till clienten om liv = 0
 	//kalla på removeplanet funktionen
 }
 void* removePlanets(void* planeten)	//skapa remove planetfunktion
 {
+	struct pt *planet = (struct pt*)planeten;
+	if(planet->next != NULL)
+	{
+		planet = planet->next;
+	}
+	else
+		planet = NULL;
 	//listan ska alltid vara fylld på alla platser
 }
