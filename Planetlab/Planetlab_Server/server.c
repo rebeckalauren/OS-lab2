@@ -252,7 +252,7 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 	char messageWhyDie[200];
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
-	double r, a1, accelerationX, accelerationY, totX, totY; 
+	double r, a1, totX = 0, totY = 0; 
 	iterator = root;
 	while(planet->life > 0) //För varje planet
 	{
@@ -260,14 +260,17 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		{
 			r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));	
 			a1 = G * (iterator->mass / pow(r,2));
-			accelerationX = a1 * ((iterator->sx - planet->sx) / r);
-			accelerationY = a1 * ((iterator->sy - planet->sy) / r); 
-
-			//Räkna ut den nya hastigheten
-			//Lägg till accs x och y i x och y totalsumma
+			totX += a1 * ((iterator->sx - planet->sx) / r);
+			totY += a1 * ((iterator->sy - planet->sy) / r); 
 
 			iterator = iterator->next;
 		}
+			//räkna ut ny position
+			planet->vx = planet->vx + (totX * DT);	//vx_new
+			planet->sx = planet->sx + (planet->vx * DT);			//sx_new
+
+			planet->vx = planet->vy + (totY * DT);	//vx_new
+			planet->sy = planet->sy + (planet->vy * DT);			//sx_new
 
 		//döda om den är utanför
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
