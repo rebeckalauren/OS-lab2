@@ -257,18 +257,13 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 	{
 		while (iterator != NULL)	//räkna mellan planeter
 		{
-			//räkan ut r 
 			r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));	
-			//räkna ut a1
 			a1 = G * (iterator->mass / pow(r,2));
-			//räkna ut accelerationändring X
 			accelerationX = a1 * ((iterator->sx - planet->sx) / r);
-			//räkna ut accelerationändring Y
 			accelerationY = a1 * ((iterator->sy - planet->sy) / r); 
 
 			//Räkna ut den nya hastigheten
 			//Lägg till accs x och y i x och y totalsumma
-
 
 			iterator = iterator->next;
 		}
