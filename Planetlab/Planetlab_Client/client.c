@@ -110,6 +110,9 @@ void main(void)
 			printf("failed sending data to server\n");
 
 	//}
+	while(1)
+	{
+	}
 	mailslotClose (mailSlot);
 	return;
 }
