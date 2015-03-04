@@ -256,21 +256,24 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 	iterator = root;
 	while(planet->life > 0) //För varje planet
 	{
-		while (iterator != NULL)	//räkna mellan planeter
+		while (iterator != NULL )	//räkna mellan planeter
 		{
-			r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));	
-			a1 = G * (iterator->mass / pow(r,2));
-			totX += a1 * ((iterator->sx - planet->sx) / r);
-			totY += a1 * ((iterator->sy - planet->sy) / r); 
+			if(iterator != planet)
+			{
+				r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));	
+				a1 = G * (iterator->mass / pow(r,2));
+				totX += a1 * ((iterator->sx - planet->sx) / r);
+				totY += a1 * ((iterator->sy - planet->sy) / r); 
+			}
 
 			iterator = iterator->next;
 		}
 			//räkna ut ny position
-			planet->vx = planet->vx + (totX * DT);	//vx_new
-			planet->sx = planet->sx + (planet->vx * DT);			//sx_new
+			planet->vx = planet->vx + (totX * DT);				//vx_new
+			planet->sx = planet->sx + (planet->vx * DT);		//sx_new
 
-			planet->vx = planet->vy + (totY * DT);	//vx_new
-			planet->sy = planet->sy + (planet->vy * DT);			//sx_new
+			planet->vy = planet->vy + (totY * DT);				//vx_new
+			planet->sy = planet->sy + (planet->vy * DT);		//sx_new
 
 		//döda om den är utanför
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
