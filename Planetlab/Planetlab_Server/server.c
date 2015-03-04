@@ -132,12 +132,12 @@ DWORD WINAPI mailThread(LPVOID arg)
 	for(;;) 
 	{				
 		/* (ordinary file manipulating functions are used to read from mailslots) 
-		 in this example the server receives strings from the client side and   
-		 displays them in the presentation window                               
-		 NOTE: binary data can also be sent and received, e.g. planet structures*/
+		in this example the server receives strings from the client side and   
+		displays them in the presentation window                               
+		NOTE: binary data can also be sent and received, e.g. planet structures*/
 
 		bytesRead = mailslotRead (mailbox, buffer, sizeof(buffer));
-		
+
 		if(bytesRead!= 0) 
 		{
 			struct pt *planet = (struct pt*)malloc(sizeof(struct pt));	
@@ -184,12 +184,12 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 		//posX += 4;
 		//posY -= 2; //(int) (10 * sin(posX / (double) 30) + 20);
 
-			iterator = root;
-			while(iterator != NULL)
-			{
+		iterator = root;
+		while(iterator != NULL)
+		{
 			SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);
-					iterator = iterator->next;
-				}
+			iterator = iterator->next;
+		}
 		windowRefreshTimer (hWnd, UPDATE_FREQ);
 		break;
 		/****************************************************************\
@@ -258,13 +258,12 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		while (iterator != NULL)	//räkna mellan planeter
 		{
 			r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));		//räkan ut r 
-		iterator = iterator->next;
+			iterator = iterator->next;
+		}
+
+		planet->life = planet->life -1;		//minska liv med 1
+		Sleep(UPDATE_FREQ);
 	}
-		
-	planet->life = planet->life -1;		//minska liv med 1
-	
-	Sleep(UPDATE_FREQ);
-}
 
 	//räkna ut a1
 	//räkna ut accs i x och y 
