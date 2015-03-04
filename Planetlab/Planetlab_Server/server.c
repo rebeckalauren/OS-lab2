@@ -37,7 +37,9 @@ LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 struct pt* root;
 void checkPlanets(struct pt* Testplanet);
 void createPlanet(char*, double, double, double, double, double, int);
-void* updatePlanets(void* vifårse);
+void* updatePlanets(void* planeten);
+void removePlanets(void* planeten);
+
 /*********************  Prototypes  ***************************/
 /* NOTE: Windows has defined its own set of types. When the   */
 /*       types are of importance to you we will write comments*/ 
@@ -297,9 +299,9 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		strcat_s(messageWhyDie, sizeof(messageWhyDie), " died because out of bounds!");
 	}
 	mailslotWrite(messages, messageWhyDie, 200);
-	//kalla på removeplanet funktionen
+	removePlanets(planet);	//kalla på removeplanet funktionen
 }
-void* removePlanets(void* planeten)	//skapa remove planetfunktion
+void removePlanets(void* planeten)	//skapa remove planetfunktion
 {
 	struct pt *planet = (struct pt*)planeten;
 	if(planet->next != NULL)
