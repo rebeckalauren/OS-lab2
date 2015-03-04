@@ -75,13 +75,12 @@ void main(void)
 	newplanet->life = _life;
 	newplanet->next = NULL;*/
 
-
 	newplanet->sx = 300;											
 	newplanet->sy = 300;											
 	newplanet->vx = 0;											
 	newplanet->vy = 0;											
 	newplanet->mass = 100000000;											
-	newplanet->life = 3773738384;
+	newplanet->life = 9999999;
 	newplanet->next = NULL;
 
 	bytesWritten = mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));
@@ -96,7 +95,7 @@ void main(void)
 	newplanet->vx = 0;											
 	newplanet->vy = 0.008;											
 	newplanet->mass = 1000;											
-	newplanet->life = 377373838;
+	newplanet->life = 9999999;
 	newplanet->next = NULL;
 
 	bytesWritten = mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));

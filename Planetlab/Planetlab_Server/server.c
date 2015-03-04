@@ -251,7 +251,7 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 {
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
-	double r, a1, totX = 0, totY = 0;
+	double totX = 0, totY = 0;
 	int flag = 0;
 	char messageWhyDie[200];
 	iterator = root;
@@ -261,8 +261,8 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		{
 			if(iterator != planet)
 			{
-				r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));	
-				a1 = G * (iterator->mass / pow(r,2));
+				double r = sqrt(pow((iterator->sx - planet->sx), 2)+ pow((iterator->sy - planet->sy), 2));	
+				double a1 = G * (iterator->mass / (r*r));
 				totX += a1 * ((iterator->sx - planet->sx) / r);
 				totY += a1 * ((iterator->sy - planet->sy) / r); 
 			}
@@ -270,11 +270,11 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 			iterator = iterator->next;
 		}
 		//räkna ut ny position
-		planet->vx = planet->vx + (totX * DT);				//vx_new
-		planet->sx = planet->sx + (planet->vx * DT);		//sx_new
+		planet->vx += (totX * DT);				//vx_new
+		planet->sx += (planet->vx * DT);		//sx_new
 
-		planet->vy = planet->vy + (totY * DT);				//vx_new
-		planet->sy = planet->sy + (planet->vy * DT);		//sx_new
+		planet->vy += (totY * DT);				//vx_new
+		planet->sy += (planet->vy * DT);		//sx_new
 
 		//döda om den är utanför
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
@@ -286,7 +286,7 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 			mailslotWrite(messages, messageWhyDie, 200);
 			flag = 1;
 		}
-		planet->life = planet->life - 1;		//minska liv med 1
+		planet->life--;		//minska liv med 1  //planet->life = planet->life - 1
 		Sleep(UPDATE_FREQ);
 	}
 	//die because life < 1
