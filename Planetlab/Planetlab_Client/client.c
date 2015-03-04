@@ -31,13 +31,6 @@ void main(void)
 	Sleep(2000);
 	mailSlot = mailslotConnect(Slot); 
 
-	//while (mailSlot == INVALID_HANDLE_VALUE) 
-	//{
-	//	system("CLS");
-	//	printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
-	//	mailSlot = mailslotConnect(Slot);
-	//}
-
 	/* NOTE: replace code below for sending planet data to the server. */
 	threadCreate(threadRead, 0);
 	while(1) 
