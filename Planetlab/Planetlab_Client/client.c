@@ -33,8 +33,7 @@ void main(void)
 	/* NOTE: replace code below for sending planet data to the server. */
 	threadCreate(threadRead, 0);
 	Sleep(2002);
-	/*while(1) 
-	{*/
+
 	/* send a friendly greeting to the server */
 	/* NOTE: The messages sent to the server need not to be of equal size.       */
 	/* Messages can be of different sizes as long as they don't exceed the       */
@@ -66,8 +65,6 @@ void main(void)
 	printf("planet life");
 	fgets(message, sizeof (message), stdin);
 	sscanf_s(message, "%lf", &_life);*/
-
-
 
 
 	/*newplanet->sx = _sx;											
@@ -108,8 +105,6 @@ void main(void)
 		printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet->name);
 	else
 		printf("failed sending data to server\n");
-
-	//}
 	while(1)
 	{
 	}
