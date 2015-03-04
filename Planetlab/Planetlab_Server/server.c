@@ -251,31 +251,38 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 {
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
-	double r, a1, accselerationX, accselerationY, totX, totY; 
+	double r, a1, accelerationX, accelerationY, totX, totY; 
 	iterator = root;
 	while(planet->life > 0) //För varje planet
 	{
 		while (iterator != NULL)	//räkna mellan planeter
 		{
-			r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));	//räkan ut r 
-			a1 = G * (iterator->mass / pow(r,2));												//räkna ut a1
-			accselerationX = a1 * ((iterator->sx - planet->sx) / r);
-			accselerationY = a1 * ((iterator->sy - planet->sy) / r); 
-			totX = accselerationX;
-			totY = accselerationY;
+			//räkan ut r 
+			r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));	
+			//räkna ut a1
+			a1 = G * (iterator->mass / pow(r,2));
+			//räkna ut accelerationändring X
+			accelerationX = a1 * ((iterator->sx - planet->sx) / r);
+			//räkna ut accelerationändring Y
+			accelerationY = a1 * ((iterator->sy - planet->sy) / r); 
 
 			//Räkna ut den nya hastigheten
 			//Lägg till accs x och y i x och y totalsumma
-																								
-			//döda om den är utanför
-			//skicka dödsmedelande till clienten
+
+
 			iterator = iterator->next;
 		}
 
+		//döda om den är utanför
+		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
+		{
+			planet->life = 0;
+			//skicka dödsmedelande till clienten
+		}
 		planet->life = planet->life -1;		//minska liv med 1
-		//skicka dödsmedelande till clienten om liv = 0
 		Sleep(UPDATE_FREQ);
 	}
+	//skicka dödsmedelande till clienten om liv = 0
 	//kalla på removeplanet funktionen
 }
 void* removePlanets(void* planeten)	//skapa remove planetfunktion
