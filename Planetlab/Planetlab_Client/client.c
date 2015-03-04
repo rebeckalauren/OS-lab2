@@ -33,14 +33,14 @@ void main(void)
 	/* NOTE: replace code below for sending planet data to the server. */
 	threadCreate(threadRead, 0);
 	Sleep(2002);
-	while(1) 
-	{
+	/*while(1) 
+	{*/
 		/* send a friendly greeting to the server */
 		/* NOTE: The messages sent to the server need not to be of equal size.       */
 		/* Messages can be of different sizes as long as they don't exceed the       */
 		/* maximum message size that the mailslot can handle (defined upon creation).*/
 
-		printf("Name of planet");
+		/*printf("Name of planet");
 		gets_s(newplanet->name,sizeof(newplanet->name));
 
 		printf("x-position");
@@ -65,14 +65,26 @@ void main(void)
 
 		printf("planet life");
 		fgets(message, sizeof (message), stdin);
-		sscanf_s(message, "%lf", &_life);
+		sscanf_s(message, "%lf", &_life);*/
 
-		newplanet->sx = _sx;											
+
+
+
+		/*newplanet->sx = _sx;											
 		newplanet->sy = _sy;											
 		newplanet->vx = _vy;											
 		newplanet->vy = _vx;											
 		newplanet->mass = _mass;											
 		newplanet->life = _life;
+		newplanet->next = NULL;*/
+
+		
+		newplanet->sx = 300;											
+		newplanet->sy = 300;											
+		newplanet->vx = 0;											
+		newplanet->vy = 0;											
+		newplanet->mass = 100000000;											
+		newplanet->life = 3773738384;
 		newplanet->next = NULL;
 
 		bytesWritten = mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));
@@ -81,7 +93,23 @@ void main(void)
 			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet->name);
 		else
 			printf("failed sending data to server\n");
-	}
+
+		newplanet->sx = 200;											
+		newplanet->sy = 300;											
+		newplanet->vx = 0;											
+		newplanet->vy = 0.008;											
+		newplanet->mass = 1000;											
+		newplanet->life = 377373838;
+		newplanet->next = NULL;
+
+		bytesWritten = mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));
+
+		if (bytesWritten!=-1)
+			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet->name);
+		else
+			printf("failed sending data to server\n");
+
+	//}
 	mailslotClose (mailSlot);
 	return;
 }
