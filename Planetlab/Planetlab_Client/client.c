@@ -19,7 +19,8 @@ LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 #define MESSAGE "Hej på dig!"
 void main(void) 
 {
-	struct pt newplanet;
+	struct pt *newplanet = (struct pt*)malloc(sizeof(struct pt));
+	DWORD WINAPI threadRead( LPVOID lpParam );
 	double _sx, _sy, _vx, _vy, _mass, _life;
 	char planetName[100];
 	char message[100000];
@@ -27,16 +28,18 @@ void main(void)
 	DWORD bytesWritten;
 	int loops = 2000;
 
+	Sleep(2000);
 	mailSlot = mailslotConnect(Slot); 
 
-	while (mailSlot == INVALID_HANDLE_VALUE) 
-	{
-		printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
-		mailSlot = mailslotConnect(Slot);
-	}
+	//while (mailSlot == INVALID_HANDLE_VALUE) 
+	//{
+	//	system("CLS");
+	//	printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
+	//	mailSlot = mailslotConnect(Slot);
+	//}
 
 	/* NOTE: replace code below for sending planet data to the server. */
-
+	threadCreate(threadRead, 0);
 	while(1) 
 	{
 		/* send a friendly greeting to the server */
@@ -45,7 +48,7 @@ void main(void)
 		/* maximum message size that the mailslot can handle (defined upon creation).*/
 
 		printf("Name of planet");
-		gets_s(newplanet.name,sizeof(newplanet.name));
+		gets_s(newplanet->name,sizeof(newplanet->name));
 
 		printf("x-position");
 		fgets(message, sizeof (message), stdin);
@@ -71,28 +74,36 @@ void main(void)
 		fgets(message, sizeof (message), stdin);
 		sscanf_s(message, "%lf", &_life);
 
-		newplanet.sx = _sx;											
-		newplanet.sy = _sy;											
-		newplanet.vx = _vy;											
-		newplanet.vy = _vx;											
-		newplanet.mass = _mass;											
-		newplanet.life = _life;
-		newplanet.next = NULL;
+		newplanet->sx = _sx;											
+		newplanet->sy = _sy;											
+		newplanet->vx = _vy;											
+		newplanet->vy = _vx;											
+		newplanet->mass = _mass;											
+		newplanet->life = _life;
+		newplanet->next = NULL;
 
 		//struct pt planet = {"Planet1",0,0,0,0,0,0,0,0}; 
 		/*(struct pt*)malloc(sizeof(struct pt));  // Malloc = Allocates a block of size bytes of memory
 		strcpy_s(planet->name, sizeof(planet->name), "Första planeten");*/
 
-		bytesWritten = mailslotWrite (mailSlot, (void*)&newplanet, sizeof(newplanet));
+		bytesWritten = mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));
 
 		if (bytesWritten!=-1)
-			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet.name);
+			printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet->name);
 		else
 			printf("failed sending data to server\n");
-
-	/*(sleep for a while, enables you to catch a glimpse of what the client prints on the console)*/
-	Sleep(2000);
 	}
 	mailslotClose (mailSlot);
 	return;
+}
+
+DWORD WINAPI threadRead( LPVOID lpParam ) // read if planet is dead
+{
+	struct pt *newplanet = (struct pt*)malloc(sizeof(struct pt));
+	HANDLE mailSlot;
+	while (1)
+	{
+		//mailslotRead(mailSlot, newplanet, 424);
+			// read if planet is dead
+	}
 }

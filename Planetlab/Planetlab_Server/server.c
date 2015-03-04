@@ -30,12 +30,14 @@
 /* here is the timer id and timer period defined                          */
 
 #define UPDATE_FREQ     10	/* update frequency (in ms) for the timer */
+#define G 6.67259e-11
+#define DT 10
 LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 /* (the server uses a mailslot for incoming client requests) */
 struct pt* root;
-struct pt* iterator;
 void checkPlanets(struct pt* Testplanet);
 void createPlanet(char*, double, double, double, double, double, int);
+void* updatePlanets(void* vifårse);
 /*********************  Prototypes  ***************************/
 /* NOTE: Windows has defined its own set of types. When the   */
 /*       types are of importance to you we will write comments*/ 
@@ -114,9 +116,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdL
 * Purpose: Handle incoming requests from clients                     *
 * NOTE: This function is important to you.                           *
 /********************************************************************/
-DWORD WINAPI mailThread(LPVOID arg) {
-
-
+DWORD WINAPI mailThread(LPVOID arg) 
+{
 	char buffer[1024];
 	DWORD bytesRead;
 	static int posY = 0;
@@ -131,55 +132,31 @@ DWORD WINAPI mailThread(LPVOID arg) {
 	for(;;) 
 	{				
 		/* (ordinary file manipulating functions are used to read from mailslots) 
-		 in this example the server receives strings from the client side and   
-		 displays them in the presentation window                               
-		 NOTE: binary data can also be sent and received, e.g. planet structures*/
+		in this example the server receives strings from the client side and   
+		displays them in the presentation window                               
+		NOTE: binary data can also be sent and received, e.g. planet structures*/
 
-		struct pt *planet;													//ska va så här
-		char buffer[1000]; 
-		bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
-		//bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
-		// Skapa ny tråd för varje planet
-		//threadCreate(checkPlanets, 0);
-		
+		bytesRead = mailslotRead (mailbox, buffer, sizeof(buffer));
+
 		if(bytesRead!= 0) 
 		{
-			planet = (struct pt*)buffer;
-		//	threadCreate(updatePlanets, 0);
+			struct pt *planet = (struct pt*)malloc(sizeof(struct pt));	
+			memcpy(planet, buffer, sizeof(struct pt));
 			checkPlanets(planet);
-			printf("%s" ,planet->name);
 
 			/* NOTE: It is appropriate to replace this code with something that match your needs here.*/
 			posY++;  
 			/* (hDC is used reference the previously created window) */							
 			TextOut(hDC, 10, 50+posY%200, buffer, bytesRead);
 		}
-		else 
-		{
-			/* failed reading from mailslot (in this example we ignore this, and happily continue...) */
-		}
 	}
 
 	return 0;
 }
 
-
-/********************************************************************\
-* Function: LRESULT CALLBACK MainWndProc(HWND, UINT, WPARAM, LPARAM) *
-*                                                                    *
-* Purpose: Processes Application Messages (received by the window)   *
-* Comments: The following messages are processed                     *
-*                                                                    *
-*           WM_PAINT                                                 *
-*           WM_COMMAND                                               *
-*           WM_DESTROY                                               *
-*           WM_TIMER                                                 *
-*                                                                    *
-\********************************************************************/
-/* NOTE: This function is called by Windows when something happens to our window */
-
 LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) {
 
+	struct pt* iterator;
 	PAINTSTRUCT ps;
 	static int posX = 100;
 	int posY = 100;
@@ -207,19 +184,11 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 		//posX += 4;
 		//posY -= 2; //(int) (10 * sin(posX / (double) 30) + 20);
 
-		if(root != NULL)
+		iterator = root;
+		while(iterator != NULL)
 		{
-			iterator = root;
-			while(iterator != NULL)
-			{
-				SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);//(hDC, posX % 547, posY, (COLORREF) color);
-				if(iterator->next != NULL)
-				{
-					iterator = iterator->next;
-				}
-				else
-					break;
-			}
+			SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);
+			iterator = iterator->next;
 		}
 		windowRefreshTimer (hWnd, UPDATE_FREQ);
 		break;
@@ -259,29 +228,12 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 	}
 	return 0;
 }
-
-void createPlanet(char* name, double mass, double Xposition, double Yposition, double Xvelocity, double Yvelocity, int life)
-{
-	struct pt newplanet;
-
-	strcpy_s(newplanet.name, sizeof(newplanet.name), "Första planeten");
-	newplanet.sx = Xposition;											
-	newplanet.sy = Yposition;											
-	newplanet.vx = Xvelocity;											
-	newplanet.vy = Yvelocity;											
-	newplanet.mass = mass;											
-	newplanet.life = life;
-	//newplanet.next = NULL;
-
-	return (void)newplanet;
-}
 void checkPlanets(struct pt *Testplanet)
 {
+	struct pt* iterator;
 	if(root == NULL)
 	{
-		//create root
 		root = Testplanet;
-		createPlanet(root->name, root->mass, root->sx, root->sy, root->vx, root->vy, root->life);
 	}
 	else
 	{
@@ -291,13 +243,42 @@ void checkPlanets(struct pt *Testplanet)
 			iterator = iterator->next;
 		}
 		iterator->next = Testplanet;
-		iterator = iterator->next;
-		createPlanet(iterator->name, iterator->mass, iterator->sx, iterator->sy, iterator->vx, iterator->vy, iterator->life);
-		//create planet last in the linked list
 	}
+	threadCreate((LPTHREAD_START_ROUTINE)updatePlanets, Testplanet);
 }
 
-DWORD WINAPI updatePlanets(LPVOID lpParam) // Ska uppdatera rutan och flytta planeternas pixlar
+void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeternas pixlar
 {
+	struct pt *planet = (struct pt*)planeten;
+	struct pt* iterator;
+	double r, a1, accselerationX, accselerationY, tot; 
+	iterator = root;
+	while(planet->life > 0) //För varje planet
+	{
+		while (iterator != NULL)	//räkna mellan planeter
+		{
+			r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));		//räkan ut r 
+			iterator = iterator->next;
+		}
+		
+	planet->life = planet->life -1;		//minska liv med 1
 	
+	Sleep(UPDATE_FREQ);
+	}
+
+	//räkna ut a1
+	//räkna ut accs i x och y 
+	//Lägg till accs x och y i x och y totalsumma
+
+	//Räkna ut den nya hastigheten
+
+	//döda om den är utanför
+
+	//skicka dödsmedelande till clienten (clienten ska ha egen read också! (med egen tråd))
+
+	//kalla på removeplanet funktionen
+}
+void* removePlanets(void* planeten)	//skapa remove planetfunktion
+{
+	//listan ska alltid vara fylld på alla platser
 }
