@@ -38,7 +38,7 @@ struct pt* root;
 void checkPlanets(struct pt* Testplanet);
 void createPlanet(char*, double, double, double, double, double, int);
 void* updatePlanets(void* planeten);
-void removePlanets(void* planeten);
+void removePlanets(struct pt* planeten);
 
 /*********************  Prototypes  ***************************/
 /* NOTE: Windows has defined its own set of types. When the   */
@@ -301,14 +301,36 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 	mailslotWrite(messages, messageWhyDie, 200);
 	removePlanets(planet);	//kalla på removeplanet funktionen
 }
-void removePlanets(void* planeten)	//skapa remove planetfunktion
+void removePlanets(struct pt* planeten)	//skapa remove planetfunktion
 {
 	struct pt *planet = (struct pt*)planeten;
-	if(planet->next != NULL)
+	struct pt* iterator;
+	struct pt* swapper;
+	iterator = root;
+	if(planet = root)
 	{
-		planet = planet->next;
+		root = planet->next;
 	}
 	else
-		planet = NULL;
-	//listan ska alltid vara fylld på alla platser
+	{
+		while(iterator->next != NULL)
+		{
+			if(planet == iterator->next)
+			{
+				if(iterator->next != NULL)
+				{
+					swapper = iterator->next->next;
+					free(iterator->next);
+					iterator->next = swapper;
+				}
+				else
+				{
+					free(iterator->next);
+					iterator->next = NULL;
+				}
+			}
+			else
+				iterator = iterator->next;
+		}
+	}
 }
