@@ -33,7 +33,7 @@ void main(void)
 	/* NOTE: replace code below for sending planet data to the server. */
 	threadCreate(threadRead, 0);
 	Sleep(2002);
-
+	
 	/* send a friendly greeting to the server */
 	/* NOTE: The messages sent to the server need not to be of equal size.       */
 	/* Messages can be of different sizes as long as they don't exceed the       */
@@ -75,12 +75,13 @@ void main(void)
 	newplanet->life = _life;
 	newplanet->next = NULL;*/
 
+	strcpy_s(newplanet->name, sizeof(newplanet->name), "Orvar");
 	newplanet->sx = 300;											
 	newplanet->sy = 300;											
 	newplanet->vx = 0;											
 	newplanet->vy = 0;											
 	newplanet->mass = 100000000;											
-	newplanet->life = 9999999;
+	newplanet->life = 37737383;
 	newplanet->next = NULL;
 
 	bytesWritten = mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));
@@ -89,13 +90,14 @@ void main(void)
 		printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet->name);
 	else
 		printf("failed sending data to server\n");
-
+	
+	strcpy_s(newplanet->name, sizeof(newplanet->name), "Bertill");
 	newplanet->sx = 200;											
 	newplanet->sy = 300;											
 	newplanet->vx = 0;											
 	newplanet->vy = 0.008;											
 	newplanet->mass = 1000;											
-	newplanet->life = 9999999;
+	newplanet->life = 37737388;
 	newplanet->next = NULL;
 
 	bytesWritten = mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));
@@ -121,7 +123,7 @@ DWORD WINAPI threadRead( LPVOID lpParam ) // read if planet is dead
 	{
 		int bytesread = mailslotRead(mailSlot, theMessage, 424);
 		if (bytesread > 0)
-			printf("%d \n", theMessage);
+			printf("%.*s \n", bytesread, theMessage);
 	}
 	mailslotClose (mailSlot);
 }
