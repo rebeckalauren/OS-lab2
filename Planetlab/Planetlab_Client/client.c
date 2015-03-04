@@ -88,15 +88,15 @@ void main(void)
 
 DWORD WINAPI threadRead( LPVOID lpParam ) // read if planet is dead
 {
-	struct pt *newplanet = (struct pt*)malloc(sizeof(struct pt));
+	//struct pt *newplanet = (struct pt*)malloc(sizeof(struct pt));
+	char theMessage[200];
 	HANDLE mailSlot;
-	mailSlot = mailslotConnect(Slot);
+	mailSlot = mailslotCreate("\\\\.\\mailslot\\test");
 	while (1)
 	{
-		int bytesread = mailslotRead(mailSlot, newplanet, 424);
-		if (bytesread > 0)
-			printf("planet: %d died because ? \n", newplanet);
-		// read if planet is dead and why!
+		int bytesread = mailslotRead(mailSlot, theMessage, 424);
+		/*if (bytesread > 0)
+		*/	printf("%d \n", theMessage);
 	}
 	mailslotClose (mailSlot);
 }

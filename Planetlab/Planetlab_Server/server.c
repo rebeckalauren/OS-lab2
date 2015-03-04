@@ -280,9 +280,10 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		//döda om den är utanför
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
 		{
+			HANDLE messages = mailslotConnect("\\\\.\\mailslot\\test");
 			strcpy_s(messageWhyDie, sizeof(messageWhyDie) ,"out of bouns!");
 			planet->life = 0;
-			mailslotWrite(Slot, messageWhyDie, 200);
+			mailslotWrite(messages, messageWhyDie, 200);
 		}
 		planet->life = planet->life - 1;		//minska liv med 1
 		Sleep(UPDATE_FREQ);
