@@ -275,7 +275,7 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 			//skicka dödsmedelande till clienten
 			//kalla på removeplanet funktionen
 		}
-		planet->life = planet->life -1;		//minska liv med 1
+		planet->life = planet->life - 1;		//minska liv med 1
 		Sleep(UPDATE_FREQ);
 	}
 	//skicka dödsmedelande till clienten om liv = 0
@@ -283,5 +283,12 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 }
 void* removePlanets(void* planeten)	//skapa remove planetfunktion
 {
+	struct pt *planet = (struct pt*)planeten;
+	if(planet->next != NULL)
+	{
+		planet = planet->next;
+	}
+	else
+		planet = NULL;
 	//listan ska alltid vara fylld på alla platser
 }
