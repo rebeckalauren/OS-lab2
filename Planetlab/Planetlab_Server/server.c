@@ -273,6 +273,7 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		{
 			planet->life = 0;
 			//skicka dödsmedelande till clienten
+			//kalla på removeplanet funktionen
 		}
 		planet->life = planet->life -1;		//minska liv med 1
 		Sleep(UPDATE_FREQ);
