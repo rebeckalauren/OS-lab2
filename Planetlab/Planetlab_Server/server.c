@@ -29,9 +29,9 @@
 /* the server uses a timer to periodically update the presentation window */
 /* here is the timer id and timer period defined                          */
 
-#define UPDATE_FREQ     10	/* update frequency (in ms) for the timer */
+#define UPDATE_FREQ     1	/* update frequency (in ms) for the timer */
 #define G 6.67259e-11
-#define DT 10
+#define DT 100
 LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 /* (the server uses a mailslot for incoming client requests) */
 struct pt* root;
@@ -251,6 +251,7 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 {
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
+	HANDLE messages = mailslotConnect("\\\\.\\mailslot\\test");
 	double r, a1, totX = 0, totY = 0;
 	int flag = 0;
 	char messageWhyDie[200];
@@ -279,23 +280,23 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		//döda om den är utanför
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
 		{
-			HANDLE messages = mailslotConnect("\\\\.\\mailslot\\test");
-			strcpy_s(messageWhyDie, sizeof(messageWhyDie), planet->name);
-			strcpy_s(messageWhyDie, sizeof(messageWhyDie), " died because out of bounds!");
 			planet->life = 0;
-			mailslotWrite(messages, messageWhyDie, 200);
 			flag = 1;
 		}
 		planet->life = planet->life - 1;		//minska liv med 1
 		Sleep(UPDATE_FREQ);
 	}
 	//die because life < 1
+	strcpy_s(messageWhyDie, sizeof(messageWhyDie), planet->name);
 	if (flag == 0)
 	{
-		strcpy_s(messageWhyDie, sizeof(messageWhyDie), planet->name);
-		strcpy_s(messageWhyDie, sizeof(messageWhyDie), " died because out of lifes!");
-		mailslotWrite(Slot, messageWhyDie, 200);
+		strcat_s(messageWhyDie, sizeof(messageWhyDie), " died because out of lifes!");
 	}
+	else
+	{
+		strcat_s(messageWhyDie, sizeof(messageWhyDie), " died because out of bounds!");
+	}
+	mailslotWrite(messages, messageWhyDie, 200);
 	//kalla på removeplanet funktionen
 }
 void* removePlanets(void* planeten)	//skapa remove planetfunktion
