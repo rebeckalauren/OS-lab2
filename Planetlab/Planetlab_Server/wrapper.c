@@ -68,8 +68,8 @@ int	mailslotRead (HANDLE mailbox, void *msg, int msgSize)
 		&numberBytesRead, 
 		NULL);
 	pointer = (struct pt*)msg;				//Pointer point at message
-	if(numberBytesRead > 0) 
-		printf("We found this: %.*s", numberBytesRead, pointer->name);  //%. *s writes only the message and not the rest in blank spaces.
+	//if(numberBytesRead > 0) 
+	//	printf("We found this: %.*s", numberBytesRead, pointer->name);  //%. *s writes only the message and not the rest in blank spaces.
 
 	return numberBytesRead;
 	/* Read a msg from a mailslot, return nr */

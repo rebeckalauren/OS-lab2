@@ -252,9 +252,8 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
 	double r, a1, totX = 0, totY = 0;
+	int flag = 0;
 	char messageWhyDie[200];
-	strcpy_s(messageWhyDie, sizeof(messageWhyDie), planet->name);
-	strcpy_s(messageWhyDie, sizeof(messageWhyDie), " died because ");
 	iterator = root;
 	while(planet->life > 0) //För varje planet
 	{
@@ -270,28 +269,33 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 
 			iterator = iterator->next;
 		}
-			//räkna ut ny position
-			planet->vx = planet->vx + (totX * DT);				//vx_new
-			planet->sx = planet->sx + (planet->vx * DT);		//sx_new
+		//räkna ut ny position
+		planet->vx = planet->vx + (totX * DT);				//vx_new
+		planet->sx = planet->sx + (planet->vx * DT);		//sx_new
 
-			planet->vy = planet->vy + (totY * DT);				//vx_new
-			planet->sy = planet->sy + (planet->vy * DT);		//sx_new
+		planet->vy = planet->vy + (totY * DT);				//vx_new
+		planet->sy = planet->sy + (planet->vy * DT);		//sx_new
 
 		//döda om den är utanför
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
 		{
 			HANDLE messages = mailslotConnect("\\\\.\\mailslot\\test");
-			strcpy_s(messageWhyDie, sizeof(messageWhyDie) ,"out of bouns!");
+			strcpy_s(messageWhyDie, sizeof(messageWhyDie), planet->name);
+			strcpy_s(messageWhyDie, sizeof(messageWhyDie), " died because out of bounds!");
 			planet->life = 0;
 			mailslotWrite(messages, messageWhyDie, 200);
+			flag = 1;
 		}
 		planet->life = planet->life - 1;		//minska liv med 1
 		Sleep(UPDATE_FREQ);
 	}
 	//die because life < 1
-	strcpy_s(messageWhyDie, sizeof(messageWhyDie) ,"out of lifes!");
-	mailslotWrite(Slot, messageWhyDie, 200);
-	//skicka dödsmedelande till clienten om liv = 0
+	if (flag == 0)
+	{
+		strcpy_s(messageWhyDie, sizeof(messageWhyDie), planet->name);
+		strcpy_s(messageWhyDie, sizeof(messageWhyDie), " died because out of lifes!");
+		mailslotWrite(Slot, messageWhyDie, 200);
+	}
 	//kalla på removeplanet funktionen
 }
 void* removePlanets(void* planeten)	//skapa remove planetfunktion
