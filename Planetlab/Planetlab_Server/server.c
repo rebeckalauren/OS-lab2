@@ -126,6 +126,11 @@ DWORD WINAPI mailThread(LPVOID arg) {
 	/* NOTE: The name of a mailslot must start with "\\\\.\\mailslot\\"  */
 
 	mailbox = mailslotCreate(Slot);
+	while (mailbox == INVALID_HANDLE_VALUE) 
+	{
+		printf("Failed to get a handle to the mailslot!!\nHave you started the server?\n");
+		mailbox = mailslotConnect(Slot);
+	}
 
 
 	for(;;) 
@@ -136,7 +141,7 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		 NOTE: binary data can also be sent and received, e.g. planet structures*/
 
 		struct pt *planet;													//ska va så här
-		char buffer[1000]; 
+		//char buffer[1000]; 
 		bytesRead = mailslotRead (mailbox, buffer, strlen(buffer));
 		//bytesRead = mailslotRead (mailbox, (void*)&planet, sizeof(planet));	//ska va så här
 		// Skapa ny tråd för varje planet
@@ -145,14 +150,13 @@ DWORD WINAPI mailThread(LPVOID arg) {
 		if(bytesRead!= 0) 
 		{
 			planet = (struct pt*)buffer;
-		//	threadCreate(updatePlanets, 0);
+				//	threadCreate(updatePlanets, 0);
 			checkPlanets(planet);
 			printf("%s" ,planet->name);
 
-			/* NOTE: It is appropriate to replace this code with something that match your needs here.*/
-			posY++;  
+			//posY++;  
 			/* (hDC is used reference the previously created window) */							
-			TextOut(hDC, 10, 50+posY%200, buffer, bytesRead);
+			//TextOut(hDC, 10, 50+posY%200, buffer, bytesRead);
 		}
 		else 
 		{
@@ -181,8 +185,8 @@ DWORD WINAPI mailThread(LPVOID arg) {
 LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) {
 
 	PAINTSTRUCT ps;
-	static int posX = 100;
-	int posY = 100;
+	//static int posX = 100;
+	//int posY = 100;
 	HANDLE context;
 	static DWORD color = 0;
 
@@ -215,7 +219,7 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 			SetPixel (hDC, iterator->sx, iterator->sy, (COLORREF) color);//(hDC, posX % 547, posY, (COLORREF) color);
 				if(iterator->next != NULL)
 				{
-			iterator = iterator->next;
+					iterator = iterator->next;
 				}
 				else
 					break;

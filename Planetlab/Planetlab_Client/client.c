@@ -25,7 +25,7 @@ void main(void)
 	char message[100000];
 	HANDLE mailSlot;
 	DWORD bytesWritten;
-	int loops = 2000;
+	int loops = 2;
 
 	mailSlot = mailslotConnect(Slot); 
 
@@ -37,7 +37,7 @@ void main(void)
 
 	/* NOTE: replace code below for sending planet data to the server. */
 
-	while(1) 
+	while(loops>0) 
 	{
 		/* send a friendly greeting to the server */
 		/* NOTE: The messages sent to the server need not to be of equal size.       */
@@ -90,6 +90,7 @@ void main(void)
 		else
 			printf("failed sending data to server\n");
 
+		loops--;
 	/*(sleep for a while, enables you to catch a glimpse of what the client prints on the console)*/
 	Sleep(2000);
 	}
