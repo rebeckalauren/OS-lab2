@@ -126,8 +126,8 @@ DWORD WINAPI threadRead( LPVOID lpParam ) // read if planet is dead
 	while (1)
 	{
 		int bytesread = mailslotRead(mailSlot, theMessage, 424);
-		/*if (bytesread > 0)
-		*/	printf("%d \n", theMessage);
+		if (bytesread > 0)
+			printf("%d \n", theMessage);
 	}
 	mailslotClose (mailSlot);
 }
