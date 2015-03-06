@@ -31,7 +31,8 @@
 
 #define UPDATE_FREQ     1	/* update frequency (in ms) for the timer */
 #define G 6.67259e-11
-#define DT 100
+#define DT 10
+CRITICAL_SECTION Crit;
 LPTSTR Slot = TEXT("\\\\.\\mailslot\\sample_mailslot");
 /* (the server uses a mailslot for incoming client requests) */
 struct pt* root;
@@ -70,10 +71,10 @@ HDC hDC;		/* Handle to Device Context, gets set 1st time in MainWndProc */
 /* NOTE: In windows WinMain is the start function, not main */
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow ) {
-
 	HWND hWnd;
 	DWORD threadID;
 	MSG msg;
+	InitializeCriticalSection(&Crit);
 
 	/* Create the window, 3 last parameters important */
 	/* The tile of the window, the callback function */
@@ -254,23 +255,26 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
 	HANDLE messages = mailslotConnect("\\\\.\\mailslot\\test");
-	double totX = 0, totY = 0;
+	double r, a1, totX, totY;
 	int flag = 0;
 	char messageWhyDie[200];
-	iterator = root;
 	while(planet->life > 0) //För varje planet
 	{
+		EnterCriticalSection(&Crit);
+		totX=0;
+		totY=0;
+		iterator = root;
 		while (iterator != NULL )	//räkna mellan planeter
 		{
 			if(iterator != planet)
 			{
-				double r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));	
-				double a1 = G * (iterator->mass / pow(r,2));
+				r = sqrt(pow((iterator->sx - planet->sx), 2)+ pow((iterator->sy - planet->sy), 2));	
+				a1 = G * (iterator->mass / pow(r,2));
 				totX += a1 * ((iterator->sx - planet->sx) / r);
 				totY += a1 * ((iterator->sy - planet->sy) / r); 
 			}
 
-			iterator = iterator->next;
+			iterator = iterator->next; 
 		}
 		//räkna ut ny position
 		planet->vx = planet->vx + (totX * DT);				//vx_new
@@ -278,7 +282,7 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 
 		planet->vy = planet->vy + (totY * DT);				//vx_new
 		planet->sy = planet->sy + (planet->vy * DT);		//sx_new
-
+		LeaveCriticalSection(&Crit);
 		//döda om den är utanför
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
 		{
@@ -299,9 +303,9 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		strcat_s(messageWhyDie, sizeof(messageWhyDie), " died because out of bounds!");
 	}
 	mailslotWrite(messages, messageWhyDie, 200);
-	removePlanets(planet);	//kalla på removeplanet funktionen
+	removePlanets(planet);
 }
-void removePlanets(struct pt* planeten)	//skapa remove planetfunktion
+void removePlanets(struct pt* planeten)
 {
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
