@@ -254,7 +254,7 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
 	HANDLE messages = mailslotConnect("\\\\.\\mailslot\\test");
-	double r, a1, totX = 0, totY = 0;
+	double totX = 0, totY = 0;
 	int flag = 0;
 	char messageWhyDie[200];
 	iterator = root;
@@ -264,8 +264,8 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		{
 			if(iterator != planet)
 			{
-				r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));	
-				a1 = G * (iterator->mass / pow(r,2));
+				double r = sqrt(pow((planet->sx - iterator->sx), 2)+ pow((planet->sy - iterator->sy), 2));	
+				double a1 = G * (iterator->mass / pow(r,2));
 				totX += a1 * ((iterator->sx - planet->sx) / r);
 				totY += a1 * ((iterator->sy - planet->sy) / r); 
 			}
