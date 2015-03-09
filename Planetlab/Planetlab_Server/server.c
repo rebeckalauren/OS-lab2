@@ -252,12 +252,18 @@ void checkPlanets(struct pt *Testplanet)
 
 void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeternas pixlar
 {
-	struct pt *planet = (struct pt*)planeten;
-	struct pt* iterator;
-	HANDLE messages = mailslotConnect("\\\\.\\mailslot\\test");
 	double r, a1, totX, totY;
 	int flag = 0;
 	char messageWhyDie[200];
+	struct pt *planet = (struct pt*)planeten;
+	struct pt* iterator;
+	char slot[40];
+	HANDLE messages;
+	LPTSTR Slot; 
+	strcpy_s(slot, sizeof(slot), "\\\\.\\mailslot\\test");
+	strcat_s(slot,sizeof(slot),planet->pid);
+	Slot = slot;
+	messages = mailslotConnect(Slot);
 	while(planet->life > 0) //För varje planet
 	{
 		EnterCriticalSection(&Crit);
@@ -283,6 +289,8 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		planet->vy = planet->vy + (totY * DT);				//vx_new
 		planet->sy = planet->sy + (planet->vy * DT);		//sx_new
 		LeaveCriticalSection(&Crit);
+		
+		
 		//döda om den är utanför
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
 		{
