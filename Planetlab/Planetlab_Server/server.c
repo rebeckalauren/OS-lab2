@@ -280,7 +280,7 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 				totY += a1 * ((iterator->sy - planet->sy) / r); 
 			}
 
-			iterator = iterator->next;
+			iterator = iterator->next; 
 		}
 		//räkna ut ny position
 		planet->vx = planet->vx + (totX * DT);				//vx_new
