@@ -319,7 +319,7 @@ void removePlanets(struct pt* planeten)
 	struct pt* iterator;
 	struct pt* swapper;
 	iterator = root;
-	if(planet = root)
+	if(planet == root)
 	{
 		root = planet->next;
 	}

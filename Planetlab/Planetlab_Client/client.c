@@ -22,11 +22,8 @@ void main(void)
 	struct pt *newplanet = (struct pt*)malloc(sizeof(struct pt));
 	DWORD WINAPI threadRead( LPVOID lpParam );
 	double _sx, _sy, _vx, _vy, _mass, _life;
-	char planetName[100];
-	char message[100000];
 	HANDLE mailSlot;
 	DWORD bytesWritten;
-	int loops = 2000;
 	Sleep(2000);
 	mailSlot = mailslotConnect(Slot); 
 
