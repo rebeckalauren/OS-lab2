@@ -253,7 +253,7 @@ void checkPlanets(struct pt *Testplanet)
 void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeternas pixlar
 {
 	double r, a1, totX, totY;
-	int flag = 0;
+	//int flag = 0;
 	char messageWhyDie[200];
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
@@ -289,27 +289,23 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		planet->vy = planet->vy + (totY * DT);				//vx_new
 		planet->sy = planet->sy + (planet->vy * DT);		//sx_new
 		LeaveCriticalSection(&Crit);
-		
-		
+
 		//döda om den är utanför
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
 		{
 			planet->life = 0;
-			flag = 1;
+			strcpy_s(messageWhyDie, sizeof(messageWhyDie), planet->name);
+			strcat_s(messageWhyDie, sizeof(messageWhyDie), " died because out of bounds!");
+			mailslotWrite(messages, messageWhyDie, 200);
+			removePlanets(planet);
 		}
 		planet->life = planet->life - 1;		//minska liv med 1
 		Sleep(UPDATE_FREQ);
 	}
 	//die because life < 1
 	strcpy_s(messageWhyDie, sizeof(messageWhyDie), planet->name);
-	if (flag == 0)
-	{
-		strcat_s(messageWhyDie, sizeof(messageWhyDie), " died because out of lifes!");
-	}
-	else
-	{
-		strcat_s(messageWhyDie, sizeof(messageWhyDie), " died because out of bounds!");
-	}
+	strcat_s(messageWhyDie, sizeof(messageWhyDie), " died because out of lifes!");
+
 	mailslotWrite(messages, messageWhyDie, 200);
 	removePlanets(planet);
 }
@@ -318,6 +314,7 @@ void removePlanets(struct pt* planeten)
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
 	struct pt* swapper;
+	EnterCriticalSection(&Crit);
 	iterator = root;
 	if(planet == root)
 	{
@@ -345,4 +342,5 @@ void removePlanets(struct pt* planeten)
 				iterator = iterator->next;
 		}
 	}
+	LeaveCriticalSection(&Crit);
 }

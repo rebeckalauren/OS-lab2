@@ -21,11 +21,14 @@ void main(void)
 {
 	struct pt *newplanet = (struct pt*)malloc(sizeof(struct pt));
 	DWORD WINAPI threadRead( LPVOID lpParam );
+	char message[100000];
+	
 	double _sx, _sy, _vx, _vy, _mass, _life;
 	HANDLE mailSlot;
 	DWORD bytesWritten;
 	Sleep(2000);
 	mailSlot = mailslotConnect(Slot); 
+	
 
 	/* NOTE: replace code below for sending planet data to the server. */
 	threadCreate(threadRead, (void*)GetCurrentProcessId());
@@ -35,9 +38,11 @@ void main(void)
 	/* NOTE: The messages sent to the server need not to be of equal size.       */
 	/* Messages can be of different sizes as long as they don't exceed the       */
 	/* maximum message size that the mailslot can handle (defined upon creation).*/
+	
+	printf("Name of planet");
+	fgets(message, sizeof(message), stdin);
+	strcpy_s(newplanet->name, sizeof(newplanet->name), message);
 
-	/*printf("Name of planet");
-	gets_s(newplanet->name,sizeof(newplanet->name));
 	printf("x-position");
 	fgets(message, sizeof (message), stdin);
 	sscanf_s(message, "%lf", &_sx);
@@ -55,34 +60,36 @@ void main(void)
 	sscanf_s(message, "%lf", &_mass);
 	printf("planet life");
 	fgets(message, sizeof (message), stdin);
-	sscanf_s(message, "%lf", &_life);*/
+	sscanf_s(message, "%lf", &_life);
+	sprintf_s(newplanet->pid,15, "%lu", GetCurrentProcessId());
 
-	/*newplanet->sx = _sx;											
+	newplanet->sx = _sx;											
 	newplanet->sy = _sy;											
 	newplanet->vx = _vy;											
 	newplanet->vy = _vx;											
 	newplanet->mass = _mass;											
 	newplanet->life = _life;
-	newplanet->next = NULL;*/
-
-	strcpy_s(newplanet->name, sizeof(newplanet->name), "Orvar");
-	newplanet->sx = 300;											
-	newplanet->sy = 300;											
-	newplanet->vx = 0;											
-	newplanet->vy = 0;											
-	newplanet->mass = 100000000;											
-	newplanet->life = 37737383;
 	newplanet->next = NULL;
-	sprintf_s(newplanet->pid,15, "%lu", GetCurrentProcessId());
+	
+	
+	
+	//strcpy_s(newplanet->name, sizeof(newplanet->name), "Orvar");
+	//newplanet->sx = 300;											
+	//newplanet->sy = 300;											
+	//newplanet->vx = 0;											
+	//newplanet->vy = 0;											
+	//newplanet->mass = 100000000;											
+	//newplanet->life = 100;//37737383;
+	//newplanet->next = NULL;
+	//sprintf_s(newplanet->pid,15, "%lu", GetCurrentProcessId());
 
-	bytesWritten = mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));
+	mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));
 
-	if (bytesWritten!=-1)
-		printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet->name);
-	else
-		printf("failed sending data to server\n");
-
-	strcpy_s(newplanet->name, sizeof(newplanet->name), "Bertill");
+	//if (bytesWritten!=-1)
+	//	printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet->name);
+	//else
+	//	printf("failed sending data to server\n");
+	/*strcpy_s(newplanet->name, sizeof(newplanet->name), "Bertill");
 	newplanet->sx = 200;											
 	newplanet->sy = 300;											
 	newplanet->vx = 0;											
@@ -91,13 +98,13 @@ void main(void)
 	newplanet->life = 37737388;
 	newplanet->next = NULL;
 	sprintf_s(newplanet->pid,15, "%lu", GetCurrentProcessId());
-
+*//*
 	bytesWritten = mailslotWrite (mailSlot, (void*)newplanet, sizeof(struct pt));
 
 	if (bytesWritten!=-1)
 		printf("data sent to server (bytes = %d), (name = %s) \n", bytesWritten, newplanet->name);
 	else
-		printf("failed sending data to server\n");
+		printf("failed sending data to server\n");*/
 	while(1)
 	{
 	}
