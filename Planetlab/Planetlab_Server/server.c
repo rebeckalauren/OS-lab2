@@ -296,6 +296,7 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 			strcat_s(messageWhyDie, sizeof(messageWhyDie), " died because out of bounds!");
 			mailslotWrite(messages, messageWhyDie, 200);
 			removePlanets(planet);
+			return NULL;
 		}
 		planet->life = planet->life - 1;		//minska liv med 1
 		Sleep(UPDATE_FREQ);
