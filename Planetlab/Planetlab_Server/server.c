@@ -253,7 +253,6 @@ void checkPlanets(struct pt *Testplanet)
 void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeternas pixlar
 {
 	double r, a1, totX, totY;
-	//int flag = 0;
 	char messageWhyDie[200];
 	struct pt *planet = (struct pt*)planeten;
 	struct pt* iterator;
@@ -293,7 +292,6 @@ void* updatePlanets(void* planeten) // Ska uppdatera rutan och flytta planeterna
 		//döda om den är utanför
 		if(planet->sx < 0 || planet->sx > 800 || planet->sy < 0 || planet->sy > 600)
 		{
-			planet->life = 0;
 			strcpy_s(messageWhyDie, sizeof(messageWhyDie), planet->name);
 			strcat_s(messageWhyDie, sizeof(messageWhyDie), " died because out of bounds!");
 			mailslotWrite(messages, messageWhyDie, 200);
